@@ -1,3 +1,4 @@
+# Workflow to demonstrate a simple workflow with two agents: a Writer and a Reviewer.
 import asyncio
 
 from agent_client_factory import get_azopenaichatclient
@@ -36,5 +37,6 @@ async def main() -> None:
         if isinstance(event, AgentRunEvent):
             print(f"Agent: {event.executor_id} - Agent response: {event.data}")
 
+# Run the main function
 if __name__ == "__main__":
     asyncio.run(main())

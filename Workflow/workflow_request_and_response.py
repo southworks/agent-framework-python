@@ -23,21 +23,22 @@ from agent_framework import (
     WorkflowBuilder,
     WorkflowContext,
     WorkflowOutputEvent,
-    WorkflowRunState,
-    WorkflowStatusEvent,
     handler,
 )
 
+# Define request message for human feedback
 @dataclass
 class HumanFeedbackRequest(RequestInfoMessage):
     """Request message for human feedback in the guessing game."""
     prompt: str = ""
     guess: int | None = None
 
+# Define structured output model for agent's guess
 class GuessOutput(BaseModel):
     """Structured output from the AI agent with response_format enforcement."""
     guess: int
 
+# Main class to manage turns between agent and human
 class TurnManager(Executor):
     """Coordinates turns between the AI agent and human player.
 
@@ -97,10 +98,10 @@ class TurnManager(Executor):
         )
         await ctx.send_message(AgentExecutorRequest(messages=[user_msg], should_respond=True))
 
+# Main function to build and run the workflow
 async def main() -> None:
     # Create the chat agent with structured output enforcement
     chat_client = get_azopenaichatclient()
-    print("Agent creation...")
     agent = chat_client.create_agent(
         instructions=(
             "You guess a number between 1 and 20. "
@@ -115,7 +116,7 @@ async def main() -> None:
     agent_exec = AgentExecutor(agent=agent, id="agent")
     request_info_executor = RequestInfoExecutor(id="request_info")
 
-    print("Workflow building...")
+    # Build the workflow
     workflow = (
         WorkflowBuilder()
         .set_start_executor(turn_manager)
@@ -132,6 +133,7 @@ async def main() -> None:
     print("-" * 50)
     input("Presioná Enter para continuar...")
     
+    # Run the interactive workflow
     await run_interactive_workflow(workflow)
 
 async def run_interactive_workflow(workflow: Workflow):
@@ -154,7 +156,8 @@ async def run_interactive_workflow(workflow: Workflow):
         pending_responses = None
 
         # Process events to collect requests and detect completion
-        requests: list[tuple[str, str]] = []  # (request_id, prompt)
+        # (request_id, prompt)
+        requests: list[tuple[str, str]] = []
         for event in events:
             if isinstance(event, RequestInfoEvent) and isinstance(event.data, HumanFeedbackRequest):
                 # RequestInfoEvent for our HumanFeedbackRequest
@@ -163,20 +166,6 @@ async def run_interactive_workflow(workflow: Workflow):
                 # Capture workflow output when yielded
                 workflow_output = str(event.data)
                 completed = True
-
-        pending_status = any(
-            isinstance(e, WorkflowStatusEvent) and e.state == WorkflowRunState.IN_PROGRESS_PENDING_REQUESTS
-            for e in events
-        )
-        idle_with_requests = any(
-            isinstance(e, WorkflowStatusEvent) and e.state == WorkflowRunState.IDLE_WITH_PENDING_REQUESTS
-            for e in events
-        )
-
-        if pending_status:
-            print("🔄 State: IN_PROGRESS_PENDING_REQUESTS (requests outstanding)")
-        if idle_with_requests:
-            print("⏸️  State: IDLE_WITH_PENDING_REQUESTS (awaiting human input)")
 
         if requests and not completed:
             responses: dict[str, str] = {}
@@ -193,5 +182,6 @@ async def run_interactive_workflow(workflow: Workflow):
     # Show final result
     print(f"\n🎉 {workflow_output}")
 
+# Run the workflow
 if __name__ == "__main__":
     asyncio.run(main())

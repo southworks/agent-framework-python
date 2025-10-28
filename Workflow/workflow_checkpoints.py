@@ -1,4 +1,4 @@
-# pip install agent-framework-core
+# Workflow to demonstrate checkpointing and resuming workflows.
 import asyncio
 
 from agent_framework import (
@@ -32,7 +32,7 @@ async def final(text: str, ctx: WorkflowContext[Never]) -> None:
     """Yields the final processed text."""
     await ctx.yield_output(text)
 
-
+# Main function to run the workflow with checkpoints
 async def main() -> None:
     # Checkpoint storage
     checkpoint_storage = FileCheckpointStorage(CHECKPOINTS_FOLDER)
@@ -74,5 +74,6 @@ async def main() -> None:
     for event in await workflow.run_from_checkpoint(last_checkpoint_id):
         print(f"Event: {event}")
 
+# Run the main function
 if __name__ == "__main__":
     asyncio.run(main())

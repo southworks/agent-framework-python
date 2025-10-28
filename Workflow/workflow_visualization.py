@@ -1,6 +1,4 @@
-# Workflow/workflow_test.py
-# Sample: Concurrent (Fan-out/Fan-in) with Agents + Visualization
-
+# This example demonstrates a visualization of fan-out/fan-in workflow
 import asyncio
 
 from dataclasses import dataclass
@@ -8,29 +6,26 @@ from agent_framework import (
     AgentExecutor,
     AgentExecutorRequest,
     AgentExecutorResponse,
-    AgentRunEvent,
     ChatMessage,
     Executor,
     Role,
     WorkflowBuilder,
     WorkflowContext,
-    WorkflowOutputEvent,
-    WorkflowViz,
     handler,
 )
 from typing_extensions import Never
 from agent_client_factory import get_azopenaichatclient
 from agent_utilities import WorkflowVisualizationType, generate_workflow_visualization
 
+# Define a dataclass to hold aggregated insights
 @dataclass
 class AggregatedInsights:
     """Structured output from the aggregator."""
-
     research: str
     marketing: str
     legal: str
 
-
+# Executor to dispatch prompts to expert agents
 class DispatchToExperts(Executor):
     """Dispatches the incoming prompt to all expert agent executors (fan-out)."""
 
@@ -43,6 +38,7 @@ class DispatchToExperts(Executor):
                 target_id=expert_id,
             )
 
+# Executor to aggregate responses from expert agents
 class AggregateInsights(Executor):
     """Aggregates expert agent responses into a single consolidated result (fan-in)."""
 
@@ -73,7 +69,7 @@ class AggregateInsights(Executor):
 
         await ctx.yield_output(consolidated)
 
-
+# Main function to build and visualize the workflow
 async def main() -> None:
     # Create agent executors for domain experts
     chat_client = get_azopenaichatclient()
@@ -120,12 +116,12 @@ async def main() -> None:
         .build()
     )
 
-    # 2.5) Generate workflow visualization
+    # Generate workflow visualization
     print("Generating workflow visualization...")
     generate_workflow_visualization(workflow, name="diagrams/workflow_visualization")
     generate_workflow_visualization(workflow, type=WorkflowVisualizationType.MERMAID)
     generate_workflow_visualization(workflow, type=WorkflowVisualizationType.DIGRAPH)
 
-
+# Run the workflow
 if __name__ == "__main__":
     asyncio.run(main())

@@ -1,5 +1,4 @@
-# pip install agent-framework-core
-
+# Workflow to demonstrate branching using conditional edges based on spam detection results.
 import asyncio
 from agent_utilities import generate_workflow_visualization, get_input_text
 from agent_client_factory import get_azopenaichatclient
@@ -157,5 +156,6 @@ async def main() -> None:
     if outputs:
         print(f"Workflow output: {outputs[0]}")
 
+# Run the main function
 if __name__ == "__main__":
     asyncio.run(main())

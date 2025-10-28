@@ -36,6 +36,7 @@ INITIAL_PROMPT = (
     "per task type (image classification, text classification, and text generation)."
 )
 
+# Event handler for Magentic workflow events
 async def on_event(event: MagenticCallbackEvent) -> None:
     if isinstance(event, MagenticOrchestratorMessageEvent):
         # Manager's planning and coordination messages
@@ -62,6 +63,7 @@ async def on_event(event: MagenticCallbackEvent) -> None:
         print("=" * 50)
 
 async def main() -> None:
+    # Create participant agents
     researcher_agent = ChatAgent(
         name="ResearcherAgent",
         description="Specialist in research and information gathering",
@@ -80,7 +82,7 @@ async def main() -> None:
     print("\nBuilding Magentic Workflow...")
 
     # TODO: Create a custom StandardMagenticManager
-
+    # Build the Magentic workflow
     workflow = (
         MagenticBuilder()
         .participants(researcher=researcher_agent, coder=coder_agent)
@@ -134,5 +136,6 @@ async def main() -> None:
                 else:
                     pending_request = None
 
+# Run the main function
 if __name__ == "__main__":
     asyncio.run(main())

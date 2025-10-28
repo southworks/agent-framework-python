@@ -65,6 +65,7 @@ async def main() -> None:
         .add_fan_in_edges([count, summation, average], aggregator)
         .build()
     )
+    generate_workflow_visualization(workflow, name="diagrams/workflow_concurrent")
 
     # Run the workflow
     output: list[int | float] | None = None
@@ -76,6 +77,6 @@ async def main() -> None:
     if output is not None:
         print(output)
 
+# Run the main function
 if __name__ == "__main__":
     asyncio.run(main())
-

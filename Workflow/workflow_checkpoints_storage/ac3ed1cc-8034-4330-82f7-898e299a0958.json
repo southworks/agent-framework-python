@@ -1,0 +1,26 @@
+{
+  "checkpoint_id": "ac3ed1cc-8034-4330-82f7-898e299a0958",
+  "workflow_id": "ee613a7c-073c-475d-a831-b88ab52ef522",
+  "timestamp": "2025-10-28T20:34:30.220485+00:00",
+  "messages": {
+    "first_executor": [
+      {
+        "data": "¡Checkpoints_are_great!",
+        "source_id": "first_executor",
+        "target_id": null,
+        "trace_contexts": null,
+        "source_span_ids": null
+      }
+    ]
+  },
+  "shared_state": {},
+  "executor_states": {},
+  "iteration_count": 0,
+  "max_iterations": 100,
+  "metadata": {
+    "superstep": 0,
+    "checkpoint_type": "initial",
+    "graph_signature": "c5a549292cdcf1e4ae19f645227e57e022f5a318445cc61c420b0427fe4f1bd0"
+  },
+  "version": "1.0"
+}

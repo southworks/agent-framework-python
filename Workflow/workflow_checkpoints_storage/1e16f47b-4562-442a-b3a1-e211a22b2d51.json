@@ -1,0 +1,16 @@
+{
+  "checkpoint_id": "1e16f47b-4562-442a-b3a1-e211a22b2d51",
+  "workflow_id": "ee613a7c-073c-475d-a831-b88ab52ef522",
+  "timestamp": "2025-10-28T20:34:30.407049+00:00",
+  "messages": {},
+  "shared_state": {},
+  "executor_states": {},
+  "iteration_count": 3,
+  "max_iterations": 100,
+  "metadata": {
+    "superstep": 3,
+    "checkpoint_type": "superstep",
+    "graph_signature": "c5a549292cdcf1e4ae19f645227e57e022f5a318445cc61c420b0427fe4f1bd0"
+  },
+  "version": "1.0"
+}
